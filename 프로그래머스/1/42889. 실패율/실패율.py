@@ -17,6 +17,6 @@ def solution(N, stages):
 
     # 실패율 내림차순 기준으로 [1, 2, 3, .., N] 배열 정렬
     answer = list(range(1, N + 1))
-    answer.sort(reverse=True, key=lambda x: failure[x])
+    answer.sort(key=lambda x: (-failure[x], x))
     
     return answer
