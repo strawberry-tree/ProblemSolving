@@ -1,22 +1,19 @@
-import math
+from collections import deque
+from math import ceil
 
 def solution(progresses, speeds):
+    queue = deque()
+    answer = []
     
-    finish = []
-    result = []
+    for p, s in zip(progresses, speeds):
+        queue.append(ceil((100 - p) / s))
     
-    # 작업별 걸리는 날짜 계산, O(N)
-    for i in range(len(progresses)):
-        time = math.ceil((100 - progresses[i]) / speeds[i])
+    while queue:
+        k = queue.popleft()
+        count = 1
+        while queue and queue[0] <= k:
+            queue.popleft()
+            count += 1
+        answer.append(count)
         
-        # 앞 작업보다 짧게 걸림 -> 앞 작업과 동시에 끝남
-        if finish and time <= finish[-1] :
-            result[-1] += 1
-            
-        # 앞 작업보다 길게 걸림 -> 앞 작업보다 늦게 끝남
-        # OR 첫 번째 작업일 때
-        else:
-            finish.append(time)
-            result.append(1)
-            
-    return result
+    return answer
