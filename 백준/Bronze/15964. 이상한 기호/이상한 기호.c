@@ -1,14 +1,14 @@
 #include <stdio.h>
 
-int calc(int, int);
+long long calc(long long, long long);
 
 int main(void){
-    int a, b;
-    scanf("%d%d", &a, &b);
-    printf("%d", calc(a, b));
+    long long a, b;
+    scanf("%lld%lld", &a, &b);
+    printf("%lld", calc(a, b));
     return 0;
 }   
 
-int calc(int a, int b){
+long long calc(long long a, long long b){
     return (a + b) * (a - b);
 }
