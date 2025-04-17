@@ -4,10 +4,14 @@ from collections import defaultdict
 def solution(N, road, K):
     # 인접 리스트로 그래프 구현
     graph = defaultdict(list)
+    min_weight = defaultdict(lambda: float('inf')) # 중복된 간선 제거를 위한 딕셔너리
     for v1, v2, weight in road:
+        if weight < min_weight[(v1, v2)]:
+            min_weight[(v1, v2)] = weight
+    for (v1, v2), weight in min_weight.items():
         graph[v1].append((v2, weight))
         graph[v2].append((v1, weight))
-    
+        
     # 다익스트라 알고리즘
     distance = [float('inf')] * (N + 1)
     distance[1] = 0
@@ -28,5 +32,4 @@ def solution(N, road, K):
     for i in range(1, N + 1):
         if distance[i] <= K:
             result += 1
-
     return result
