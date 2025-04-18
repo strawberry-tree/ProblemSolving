@@ -1,14 +1,24 @@
-def dfs(word, target, index):
-    if word == target:
-        return index, True
-    
-    if len(word) != 5:
-        for letter in "AEIOU":
-            index, flag = dfs(word + letter, target, index + 1)
-            if flag:
-                return index, flag
-        
-    return index, False
-        
 def solution(word):
-    return dfs("", word, 0)[0]
+    index = 0
+    found = False
+    
+    def dfs(current, target):
+        nonlocal index, found
+    
+        if found:
+            return
+
+        if current == target:
+            found = True
+            return
+
+        if len(current) != 5:
+            for letter in "AEIOU":
+                index += 1
+                dfs(current + letter, target)
+                if found:
+                    return
+
+    
+    dfs("", word)
+    return index
