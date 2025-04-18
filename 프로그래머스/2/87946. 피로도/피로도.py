@@ -1,20 +1,17 @@
-def enter(i, n, results, visited, k, dungeons):
-    # i: 지금 들어간 던전, n: 탐험한 던전 수
-    k -= dungeons[i][1]
-    visited.add(i)
+def enter(n, visited, k, dungeons):
+    # n: 지금까지 들어간 던전 수
+    answer = n
     
-    for next_i in range(len(dungeons)):
-        if k >= dungeons[next_i][0] and next_i not in visited:
-            enter(next_i, n + 1, results, visited, k, dungeons)
+    # i: 들어갈 던전
+    for i in range(len(dungeons)):
+        if k >= dungeons[i][0] and i not in visited:
+            visited.add(i)
+            answer = max(answer, enter(n + 1, visited, k - dungeons[i][1], dungeons))
+            visited.remove(i)
     
-    visited.remove(i)
-    results.append(n)
+    return answer
 
 def solution(k, dungeons):
     results = [0]
     visited = set()
-    for first_i in range(len(dungeons)):
-        if k >= dungeons[first_i][0]:
-            enter(first_i, 1, results, visited, k, dungeons)
-    
-    return max(results)
+    return enter(0, visited, k, dungeons)
