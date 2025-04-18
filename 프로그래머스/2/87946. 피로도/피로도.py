@@ -12,6 +12,5 @@ def enter(n, visited, k, dungeons):
     return answer
 
 def solution(k, dungeons):
-    results = [0]
     visited = set()
     return enter(0, visited, k, dungeons)
