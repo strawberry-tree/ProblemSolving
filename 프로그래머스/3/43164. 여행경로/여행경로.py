@@ -1,22 +1,19 @@
 from collections import defaultdict
 
-def dfs(node, prev, graph, route, curr_tickets, num_tickets):
+def dfs(node, graph, route, curr_tickets, num_tickets):
     route.append(node)
-    if prev is not None:
-        curr_tickets[(prev, node)] -= 1
     
     if num_tickets == 0:
         return True
 
     for adj in graph[node]:
         if curr_tickets[(node, adj)] > 0:
-            if dfs(adj, node, graph, route, curr_tickets, num_tickets - 1):
+            curr_tickets[(node, adj)] -= 1
+            if dfs(adj, graph, route, curr_tickets, num_tickets - 1):
                 return True
+            curr_tickets[(node, adj)] += 1
     
     route.pop()
-    if prev is not None:
-        curr_tickets[(prev, node)] += 1
-
     return False
     
 def solution(tickets):
@@ -29,6 +26,6 @@ def solution(tickets):
         graph[key] = sorted(graph[key])
     
     route = []
-    dfs("ICN", None, graph, route, curr_tickets, len(tickets))    
+    dfs("ICN", graph, route, curr_tickets, len(tickets))    
     
     return route
