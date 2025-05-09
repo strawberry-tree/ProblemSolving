@@ -1,15 +1,10 @@
 from functools import cmp_to_key
 
 def compare(x, y):
-    a = x + y
-    b = y + x
+    a = int(x + y)
+    b = int(y + x)
     
-    if a < b:       # y + x가 더 큰 경우
-        return -1   # x가 앞 순서
-    elif b < a:     # x + y가 더 큰 경우
-        return 1    # y가 앞 순서
-    else:
-        return 0    # 동일 시 순서를 바꾸지 않음
+    return a - b
 
 
 def solution(numbers):
