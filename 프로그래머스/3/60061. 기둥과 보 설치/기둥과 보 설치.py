@@ -13,7 +13,7 @@ def build(x, y, a, curr):
         or ((x - 1, y, 1) in curr and (x + 1, y, 1) in curr))
         # 양끝에 보가 연결되어 있음
 
-def destroy(x, y, curr):
+def destroy(curr):
     # 없앤 후 기존 설치 보/기둥에 대해 규칙이 안 깨지는지 확인
     for x, y, a in curr:
         if not build(x, y, a, curr):
@@ -29,7 +29,7 @@ def solution(n, build_frame):
                 curr.add((x, y, a))
         elif b == 0:        # 철거
             curr.remove((x, y, a))
-            if not destroy(x, y, curr):
+            if not destroy(curr):
                 curr.add((x, y, a))
     
     result = []
