@@ -1,69 +1,40 @@
-def build_col(x, y, n, curr_col, curr_row):
-    # 기둥 설치
-    if y == 0:  # 바닥 위
-        return True
-    elif y > 0 and curr_col[x][y - 1]:      # 다른 기둥 위
-        return True
-    elif x < n and curr_row[x][y]:          # 다른 보의 왼쪽 위
-        return True
-    elif x >= 1 and curr_row[x - 1][y]:     # 다른 보의 오른쪽 위
-        return True
-    return False
+def build(x, y, a, curr):
+    # 기둥 설치 가능 여부 반환
+    if a == 0:
+        return (y == 0                      # 바닥 위
+        or (x, y - 1, 0) in curr            # 아래에 기둥이 있음
+        or (x, y, 1) in curr                # 아래에 보의 왼쪽 끝이 있음
+        or (x - 1, y, 1) in curr)           # 아래에 보의 오른쪽 끝이 있음
+    
+    # 보 설치 가능 여부 반환
+    if a == 1:
+        return ((x, y - 1, 0) in curr              # 왼쪽 끝 아래에 기둥이 있음
+        or (x + 1, y - 1, 0) in curr               # 오른쪽 끝 아래에 기둥이 있음
+        or ((x - 1, y, 1) in curr and (x + 1, y, 1) in curr))
+        # 양끝에 보가 연결되어 있음
 
-def build_row(x, y, n, curr_col, curr_row):
-    if x < n and curr_col[x][y - 1]:                  # 왼쪽 끝이 기둥 위
-        return True
-    elif x < n and curr_col[x + 1][y - 1]:            # 오른쪽 끝이 기둥 위
-        return True
-    elif 1 <= x < n - 1 and curr_row[x - 1][y] and curr_row[x + 1][y]:
-        return True
-    return False
-
-def destroy(x, y, n, curr_col, curr_row):
-    # 일단 없애고, 인접 기둥 / 보 규칙이 안 깨지는지 확인
-    for dx in [-1, 0, 1]:
-        for dy in [-1, 0, 1]:
-            nx = x + dx
-            ny = y + dy
-            if 0 <= nx <= n and 0 <= ny <= n:
-                if curr_col[nx][ny]:
-                    if not build_col(nx, ny, n, curr_col, curr_row):
-                        return False
-                if curr_row[nx][ny]:
-                    if not build_row(nx, ny, n, curr_col, curr_row):
-                        return False
+def destroy(x, y, curr):
+    # 없앤 후 기존 설치 보/기둥에 대해 규칙이 안 깨지는지 확인
+    for x, y, a in curr:
+        if not build(x, y, a, curr):
+            return False
     return True
 
 def solution(n, build_frame):
-    curr_col = [[0] * (n + 1) for _ in range(n + 1)]
-    curr_row = [[0] * (n + 1) for _ in range(n + 1)]
-    # 0 -> 없음, 1 -> 있음
+    curr = set()
     
     for x, y, a, b in build_frame:
         if b == 1:          # 설치
-            if a == 0:      # 기둥
-                if build_col(x, y, n, curr_col, curr_row):
-                    curr_col[x][y] = 1
-            elif a == 1:    # 보
-                if build_row(x, y, n, curr_col, curr_row):
-                    curr_row[x][y] = 1
+            if build(x, y, a, curr):
+                curr.add((x, y, a))
         elif b == 0:        # 철거
-            if a == 0:
-                curr_col[x][y] = 0
-                if not destroy(x, y, n, curr_col, curr_row):
-                    curr_col[x][y] = 1
-            elif a == 1:
-                curr_row[x][y] = 0
-                if not destroy(x, y, n, curr_col, curr_row):
-                    curr_row[x][y] = 1
+            curr.remove((x, y, a))
+            if not destroy(x, y, curr):
+                curr.add((x, y, a))
     
     result = []
-    for x in range(n + 1):
-        for y in range(n + 1):
-            if curr_col[x][y] == 1:
-                result.append([x, y, 0])
-            if curr_row[x][y] == 1:
-                result.append([x, y, 1])
+    for x, y, a in list(curr):
+        result.append([x, y, a])
     result.sort()
     
     return result
