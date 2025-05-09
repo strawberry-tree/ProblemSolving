@@ -2,11 +2,11 @@ def build_col(x, y, n, curr_col, curr_row):
     # 기둥 설치
     if y == 0:  # 바닥 위
         return True
-    elif curr_col[x][y - 1]:      # 다른 기둥 위
+    elif y > 0 and curr_col[x][y - 1]:      # 다른 기둥 위
         return True
-    elif curr_row[x][y]:          # 다른 보의 왼쪽 위
+    elif x < n and curr_row[x][y]:          # 다른 보의 왼쪽 위
         return True
-    elif curr_row[x - 1][y]:     # 다른 보의 오른쪽 위
+    elif x >= 1 and curr_row[x - 1][y]:     # 다른 보의 오른쪽 위
         return True
     return False
 
