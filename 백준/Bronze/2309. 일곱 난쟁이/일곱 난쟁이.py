@@ -1,29 +1,16 @@
-def find_fake(heights):
-    for i in range(9):      # i: 첫번째 가짜 난쟁이
-        for j in range(i + 1, 9):  # j: 두번째 가짜 난쟁이
-            total = 0
-            # i번째, j번째 난쟁이 빼고 합을 구함
-            for k in range(9):
-                if i == k or j == k:
-                    continue
-                total += heights[k]
-            if total == 100:
-                return i, j
+from itertools import combinations
 
 heights = []
-for i in range(9):
+for _ in range(9):
     heights.append(int(input()))
 
-fake1, fake2 = find_fake(heights)
-
-answer = []
-
-for i in range(9):
-    if i != fake1 and i != fake2:
-        answer.append(heights[i])
+def find_comb(heights):
+    for comb in combinations(heights, 7):
+        if sum(comb) == 100:
+            return list(comb)
         
+answer = find_comb(heights)
 answer.sort()
 
 for a in answer:
     print(a)
-            
