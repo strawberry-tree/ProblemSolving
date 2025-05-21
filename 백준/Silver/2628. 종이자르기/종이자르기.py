@@ -1,27 +1,26 @@
-A, B = map(int, input().split()) # A: 가로의 길이, B: 세로의 길이
-T = int(input())
+width, height = map(int, input().split())
+N = int(input())
 
-a_cuts = [0, A]
-b_cuts = [0, B]
+garo_cuts = [0, height]
+sero_cuts = [0, width]
 
-for _ in range(T):
-    how, loc = map(int, input().split())
-    if how == 0:    # 가로 자르기
-        b_cuts.append(loc)
-    elif how == 1:  # 세로 자르기
-        a_cuts.append(loc)
-        
-a_cuts.sort()
-b_cuts.sort()
+for _ in range(N):
+    cut, where = map(int, input().split())
+    if cut == 0:
+        garo_cuts.append(where)
+    elif cut == 1:
+        sero_cuts.append(where)
 
-a_lens = []
-b_lens = []    
+garo_cuts.sort()
+sero_cuts.sort()
 
-for i in range(1, len(a_cuts)):
-    a_lens.append(a_cuts[i] - a_cuts[i-1])
+garo_lengths = []
+sero_lengths = []
 
-for i in range(1, len(b_cuts)):
-    b_lens.append(b_cuts[i] - b_cuts[i-1])
-
-result = max(a_lens) * max(b_lens)
-print(result)
+for i in range(len(garo_cuts) - 1):
+    garo_lengths.append(garo_cuts[i + 1] - garo_cuts[i])
+    
+for i in range(len(sero_cuts) - 1):
+    sero_lengths.append(sero_cuts[i + 1] - sero_cuts[i])
+    
+print(max(garo_lengths) * max(sero_lengths))
