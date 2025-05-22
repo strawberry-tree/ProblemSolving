@@ -1,8 +1,3 @@
-# 처음엔 부분수열이 연속되는 숫자여야 하는 줄 알았음
-# 그래서 푸는 데 오래 걸림
-
-from itertools import combinations
-
 N, S = map(int, input().split())
 nums = list(map(int, input().split()))
 
