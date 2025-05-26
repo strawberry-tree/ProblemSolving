@@ -26,7 +26,7 @@ def can_build(n):
             if total == C:
                 break
 
-    if total == C and min_dist >= n:
+    if total == C:
         # C개를 다 설치한 경우, 제일 인접한 거리 반환
         return min_dist
 
