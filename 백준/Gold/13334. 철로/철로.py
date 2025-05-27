@@ -22,15 +22,15 @@ count = 0
 # 철근에 포함되는 사람들의 최대 수
 answer = 0
 
-for i in range(n):
-    endpoint = lines[i][0]
-    heapq.heappush(in_heap, lines[i][1])
-    startpoint = endpoint - d  # 철근의 시작점
+for end, start in lines:
+    bridge_end = end
+    heapq.heappush(in_heap, start)
+    bridge_start = bridge_end - d  # 철근의 시작점
        
-    while in_heap and in_heap[0] < startpoint:
+    while in_heap and in_heap[0] < bridge_start:
         heapq.heappop(in_heap)
         count += 1
 
-    answer = max(answer, i + 1 - count)
+    answer = max(answer, len(in_heap))
     
 print(answer)
