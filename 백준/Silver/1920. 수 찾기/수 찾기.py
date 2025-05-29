@@ -2,14 +2,13 @@ import bisect
 
 N = int(input())
 A = list(map(int, input().split()))
-A.sort()
-
 M = int(input())
 targets = list(map(int, input().split()))
+A.sort()
 
-for target in targets:
-    result = bisect.bisect_right(A, target) - bisect.bisect_left(A, target)
-    if result > 0:
+for t in targets:
+    count = bisect.bisect_right(A, t) - bisect.bisect_left(A, t)
+    if count > 0:
         print(1)
     else:
         print(0)
