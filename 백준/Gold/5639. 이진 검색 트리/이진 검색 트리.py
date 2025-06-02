@@ -1,52 +1,62 @@
 import sys
 input = sys.stdin.readline
+sys.setrecursionlimit(10**9)
 
-def insert_node(tree, node):
-    global root
+class Node:
+    def __init__(self, x):
+        self.value = x
+        self.left = None
+        self.right = None
+        
+class Tree:
+    def __init__(self):
+        self.root = None
+        
+    def find(self, x):
+        curr = self.root
+        while curr is not None:
+            if x < curr.value:
+                curr = curr.left
+            elif x > curr.value:
+                curr = curr.right
+            elif x == curr.value:
+                return True
+        return False
+
     
-    if root is None:    # 루트노드가 없을 때
-        tree[node] = [None, None]
-        root = node
-    else:
-        curr = root # 현재 노드
-        while True:
-            if node == curr:    # 동일 값은 추가 불가
-                break
-            if node < curr:     # 왼쪽으로
-                if tree[curr][0] is None:
-                    tree[curr][0] = node
-                    tree[node] = [None, None]
-                curr = tree[curr][0]
-                
-            if node > curr:     # 오른쪽으로
-                if tree[curr][1] is None:
-                    tree[curr][1] = node
-                    tree[node] = [None, None]
-                curr = tree[curr][1]
+    def insert(self, x):
+        if self.root is None:
+            self.root = Node(x)
             
-def postorder(tree, node):
-    visited = set()
-    stack = [node]
-    
-    while stack:
-        curr = stack[-1]
-        if tree[curr][0] and tree[curr][0] not in visited:
-            stack.append(tree[curr][0])
-        elif tree[curr][1] and tree[curr][1] not in visited:
-            stack.append(tree[curr][1])
+        curr = self.root
+        while curr is not None:
+            parent = curr
+            if x < curr.value:
+                is_left = True
+                curr = curr.left
+            elif x > curr.value:
+                is_left = False
+                curr = curr.right
+            elif x == curr.value:
+                return False
+        
+        if is_left:
+            parent.left = Node(x)
         else:
-            stack.pop()
-            visited.add(curr)
-            print(curr)
-    
-tree = dict()
-root = None     # 트리의 루트 노드
-
+            parent.right = Node(x)
+ 
+tree = Tree()
 while True:
     try:
-        node = int(input())
+        x = int(input())
+        tree.insert(x)
     except:
         break
-    insert_node(tree, node)
 
-postorder(tree, root)
+def postorder(tree, node):
+    if node is not None:
+        postorder(tree, node.left)
+        postorder(tree, node.right)
+        print(node.value)
+        
+postorder(tree, tree.root)
