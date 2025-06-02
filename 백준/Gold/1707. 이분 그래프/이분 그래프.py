@@ -1,31 +1,31 @@
 from collections import deque
 import sys
 input = sys.stdin.readline 
+sys.setrecursionlimit(10**9)
  
-
 def check(graph):
-    def bfs(x):
-        queue = deque([x])
-        visited[x] = 'A'
-        
-        while queue:
-            i = queue.popleft()
-            for j in graph[i]:
-                if not visited[j]:
-                   flag = 'B' if visited[i] == 'A' else 'A'
-                   visited[j] = flag
-                   queue.append(j)
-                if visited[j] == visited[i]:
-                    return False
-        
+    def dfs(i, flag):
+        visited[i] = flag
+        for j in graph[i]:
+            if not visited[j]:
+                if flag == "A":
+                    result = dfs(j, "B")
+                elif flag == "B":
+                    result = dfs(j, "A")
+                if not result:
+                    return False        
+            elif visited[j] == flag:
+                return False
+
         return True
+            
                 
     N = len(graph) - 1    # 노드 수
     visited = [False] * (N + 1)
     
     for i in range(1, N + 1):
         if not visited[i]:
-            if not bfs(i):
+            if not dfs(i, 'A'):
                 return False
 
     return True
