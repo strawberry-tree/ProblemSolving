@@ -41,12 +41,13 @@ while water_queue:
 # 고슴도치의 이동
 def move_dochi():
     dochi_queue = deque([(sx, sy, 1)])
+    visited[sx][sy] = True
     while dochi_queue:
         x, y, time = dochi_queue.popleft()
         for i in range(4):
             nx, ny = x + dx[i], y + dy[i]
             if 0 <= nx < R and 0 <= ny < C:
-                if not visited[nx][ny] and graph[nx][ny] not in {"X"} and water[nx][ny] > time + 1:
+                if not visited[nx][ny] and graph[nx][ny] != "X" and water[nx][ny] > time + 1:
                     if graph[nx][ny] == "D":
                         return time
                     visited[nx][ny] = True
