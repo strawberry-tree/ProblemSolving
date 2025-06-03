@@ -1,5 +1,6 @@
 import sys
 input = sys.stdin.readline
+sys.setrecursionlimit(10**9)
 N = int(input())
 
 # 1 실내 0 실외
@@ -30,7 +31,7 @@ def dfs(i, curr):
     else: 
         for j in graph[i]:
             if not visited[j]:
-                curr.update(dfs(j, curr))
+                curr = dfs(j, curr)
         return curr
     
 dfs(1, set())
