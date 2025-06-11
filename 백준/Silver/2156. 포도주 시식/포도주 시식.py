@@ -2,19 +2,18 @@ import sys
 input = sys.stdin.readline
 
 N = int(input())
-dp = [[0] * 3 for _ in range(N)]
-wine = []
+dp = [0] * (N + 1)
+wine = [0]
 
 for _ in range(N):
     wine.append(int(input()))
 
-for i in range(N):
-    if i == 0:
-        dp[i][0] = wine[i]
-        dp[i][1] = wine[i]
+for i in range(1, N + 1):
+    if i == 1:
+        dp[i] = wine[1]
+    elif i == 2:
+        dp[i] = wine[1] + wine[2]
     else:
-        dp[i][0] = dp[i - 1][1] + wine[i]
-        dp[i][1] = dp[i - 1][2] + wine[i]
-        dp[i][2] = max(dp[i - 1])
-
-print(max(dp[-1]))
+        dp[i] = max(wine[i] + dp[i - 2], wine[i] + wine[i - 1] + dp[i - 3], dp[i - 1])
+        
+print(max(dp))
