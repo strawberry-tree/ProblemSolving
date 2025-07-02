@@ -12,8 +12,8 @@ def solution(board):
         safe[x][y] = False
 
         # 인접 8칸
-        for i in range(8):
-            nx, ny = x + dx[i], y + dy[i]
+        for k in range(8):
+            nx, ny = x + dx[k], y + dy[k]
             if 0 <= nx < N and 0 <= ny < N:
                 safe[nx][ny] = False
     
@@ -28,10 +28,6 @@ def solution(board):
                 check_danger(i, j)
     
     # safe인 칸 확인
-    answer = 0
-    for i in range(N):
-        for j in range(N):
-            if safe[i][j]:
-                answer += 1
+    answer = sum(sum(i for i in row) for row in safe)
     
     return answer 
