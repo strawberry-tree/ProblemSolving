@@ -1,11 +1,20 @@
 def solution(n, words):
-    used_words = set()
-
-    for idx, word in enumerate(words):
-        # 이미 사용한 단어 OR 끝말잇기가 되지 않음
-        if (word in used_words) or (1 <= idx and words[idx-1][-1] != word[0]):
-            return [idx % n + 1, idx // n + 1]
-        else:
-            used_words.add(word)
-
+    used_words = set([words[0]])      # 이미 사용된 단어
+    
+    for i in range(1, len(words)):
+        number = i % n + 1          # 몇 번째 사람?
+        order = i // n + 1          # 몇 번째 차례?
+        
+        # 이미 사용한 단어가 아니면 탈락
+        if words[i] in used_words:
+            return [number, order]
+        
+        # 끝말잇기 조건 만족하지 않으면 탈락
+        if words[i][0] != words[i - 1][-1]:
+            return [number, order]
+        
+        # 이미 사용한 단어를 집합에 추가
+        used_words.add(words[i])
+        
+    # 탈락자가 없어
     return [0, 0]
