@@ -1,30 +1,26 @@
 from collections import deque
-
-
-def solution(maps):
-    n = len(maps)
-    m = len(maps[0])
-    distance = [[-1] * m for _ in range(n)] # -1은 미방문
-    distance[0][0] = 1
+      
+def solution(maps):                
+    N = len(maps)                           # 행의 수
+    M = len(maps[0])                        # 열의 수
     
+    # 미방문 시 -1. 방문 시 distance.
+    visited = [[-1] * M for _ in range(N)]
+    visited[0][0] = 1                       # 시작 칸도 한 칸으로 침.
     queue = deque([(0, 0)])
-    dx = [-1, 0, 1, 0]
-    dy = [0, -1, 0, 1]
-    
+    dx = [-1, 0, 1, 0]                      # 좌우 이동
+    dy = [0, -1, 0, 1]                      # 상하 이동
+
     while queue:
-        x, y = queue.popleft()
-        
+        cx, cy = queue.popleft()
+
+        # 상하좌우 탐색
         for i in range(4):
-            nx, ny = x + dx[i], y + dy[i]
-            
-            # (1) 범위 안?
-            if 0 <= nx < n and 0 <= ny < m:
-                # (2) 벽 없는 칸? (3) 미방문?
-                if maps[nx][ny] == 1 and distance[nx][ny] == -1:
-                    distance[nx][ny] = distance[x][y] + 1
-                    # 목적지 도착
-                    if nx == (n - 1) and ny == (m - 1):
-                        return distance[nx][ny]
-                    queue.append((nx, ny))
-                    
-    return -1
+            nx, ny = cx + dx[i], cy + dy[i]
+
+            # 맵 안의 칸인가? 벽이 없는가? 방문하지 않은 칸인가?
+            if 0 <= nx < N and 0 <= ny < M and maps[nx][ny] == 1 and visited[nx][ny] == -1:
+                queue.append((nx, ny))
+                visited[nx][ny] = visited[cx][cy] + 1
+                
+    return visited[-1][-1]
