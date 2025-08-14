@@ -1,0 +1,6 @@
+N, M = map(int, input().split())
+arr_a = list(map(int, input().split()))
+arr_b = list(map(int, input().split()))
+arr_a.extend(arr_b)
+arr_a.sort()
+print(*arr_a)
