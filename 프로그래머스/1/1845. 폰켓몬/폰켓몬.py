@@ -1,2 +1,5 @@
 def solution(nums):
-    return min(len(nums) // 2, len(set(nums)))
+    n = len(nums)
+    nums_set = set(nums)
+    
+    return min(n // 2, len(nums_set))
