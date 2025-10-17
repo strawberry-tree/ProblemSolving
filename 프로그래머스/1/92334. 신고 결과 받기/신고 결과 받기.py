@@ -1,26 +1,27 @@
+# 
+# report: [신고한id 신고당한id]
+
+from collections import defaultdict
+
 def solution(id_list, report, k):
-    report_dict = dict()
-    mail_dict = dict()
-    
-    # key: id, value: 해당 id를 신고한 사람 수
-    # report의 길이 N -> O(N)
+    # 딕셔너리 만들기 - {신고당한id: [신고한id의 set]}
+    report_dict = defaultdict(set)
     for r in report:
         reporter, reported = r.split()
-        if reported in report_dict:
-            report_dict[reported].add(reporter)
-        else:
-            report_dict[reported] = {reporter}
+        report_dict[reported].add(reporter)
     
-    # key: id, value: 결과 메일을 받은 횟수 
+    # 신고횟수 세기 - {id: 받은 이메일 수}
+    email_dict = defaultdict(int)
+    
     for key, value in report_dict.items():
+        # k회 이상 신고당하면 정지
         if len(value) >= k:
+            # 신고당한 사용자는 메일을 받지
             for user in value:
-                mail_dict[user] = mail_dict.get(user, 0) + 1
-    
-    result = []
-    
-    # id_list의 길이 M -> O(M)
-    for user in id_list:
-        result.append(mail_dict.get(user, 0))
-    
-    return result
+                email_dict[user] += 1
+                
+    # 정답 반환
+    answer = []
+    for user_id in id_list:
+        answer.append(email_dict[user_id])
+    return answer    
