@@ -1,21 +1,20 @@
 def solution(prices):
+    # 현재 시점을 스택에 저장
     stack = []
-    answer = [0] * len(prices)
+    result = [0] * len(prices)
     
-    # prices 순회 - O(N)
-    for idx, p in enumerate(prices):
-        # 값이 떨어지는 상황
-        while stack and prices[stack[-1]] > p:
-            d_idx = stack.pop()
-            # (값이 떨어진 시점 - 원래 시점)
-            answer[d_idx] = idx - d_idx
-        else:
-            # 제일 최근의 시점을 (현재 시점, 현재 가격)으로 저장
-            stack.append(idx)
+    # i: 현재시점
+    for i in range(len(prices)):
     
-    # 값이 떨어지지 않은 경우도 처리 - O(N)
-    while stack:
-        d_idx = stack.pop()
-        answer[d_idx] = idx - d_idx
-    
-    return answer
+        # 가격이 떨어진 경우 (stack[-1][0] -> 최근가격, stack[-1][1] -> 최근시점)
+        while stack and prices[stack[-1]] > prices[i]:
+            result[stack[-1]] = i - stack[-1]
+            stack.pop()
+            
+        stack.append(i)
+        
+    # 끝까지 가격이 떨어지지 않은 경우
+    for t in stack:
+        result[t] = len(prices) - t - 1
+        
+    return result
