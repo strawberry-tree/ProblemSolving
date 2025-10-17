@@ -1,26 +1,29 @@
 def solution(answers):
-    # 삼인방의 점수 배열
-    points = [0, 0, 0]
+    student_1 = [1, 2, 3, 4, 5]
+    student_2 = [2, 1, 2, 3, 2, 4, 2, 5]
+    student_3 = [3, 3, 1, 1, 2, 2, 4, 4, 5, 5]
+    scores = {1: 0, 2: 0, 3: 0}
     
-    # 삼인방이 찍는 방식
-    a_check = [1, 2, 3, 4, 5]
-    b_check = [2, 1, 2, 3, 2, 4, 2, 5]
-    c_check = [3, 3, 1, 1, 2, 2, 4, 4, 5, 5]
-    
-    # 각 문제를 순회하며 채점, O(N)
-    for idx, answer in enumerate(answers):
-        if answer == a_check[idx % len(a_check)]:
-            points[0] += 1
-        if answer == b_check[idx % len(b_check)]:
-            points[1] += 1
-        if answer == c_check[idx % len(c_check)]:
-            points[2] += 1
+    for i in range(len(answers)):
+        correct_answer = answers[i]
+        answer_1 = student_1[i % len(student_1)]
+        if correct_answer == answer_1:
+            scores[1] += 1
         
-    # 가장 많은 문제 수를 맞힌 사람을 result 배열에 추가
-    result = []
-    top_score = max(points)
-    for idx in range(3):
-        if points[idx] == top_score:
-            result.append(idx + 1)
+        answer_2 = student_2[i % len(student_2)]
+        if correct_answer == answer_2:
+            scores[2] += 1
+        
+        answer_3 = student_3[i % len(student_3)]
+        if correct_answer == answer_3:
+            scores[3] += 1
+        
+    max_score = max(scores.values())
+    
+    answer = []
+    
+    for i in range(1, 4):
+        if scores[i] == max_score:
+            answer.append(i)
             
-    return result
+    return answer
