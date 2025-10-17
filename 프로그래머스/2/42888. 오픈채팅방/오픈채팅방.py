@@ -1,28 +1,23 @@
 def solution(record):
-    user_dict = dict()  # id - 닉네임
-    history = []        # 입퇴장 기록
+    user_dict = dict()
+    talk_actions = [] # ("Enter" / "Leave", user_id)
     
-    # O(N) - 유저 아이디와 닉네임 / 입퇴장 기록 저장
     for r in record:
-        command, userdata = r.split(" ", 1)
-        if command == "Enter":
-            userid, nickname = userdata.split()
-            user_dict[userid] = nickname
-            history.append((userid, "enter"))
-        elif command == "Leave":
-            history.append((userdata, "leave"))            
-        elif command == "Change":
-            userid, nickname = userdata.split()
-            user_dict[userid] = nickname
-    
-    # O(N) - result 배열 반들기
-    result = []
-    
-    for userid, command in history:
-        if command == "enter":
-            result.append(f"{user_dict[userid]}님이 들어왔습니다.")
-        elif command == "leave":
-            result.append(f"{user_dict[userid]}님이 나갔습니다.")
-    
-    return result
+        r_list = r.split()
+        
+        if r_list[0] == "Enter":
+            user_dict[r_list[1]] = r_list[2]
+            talk_actions.append(("Enter", r_list[1]))
+        elif r_list[0] == "Leave":
+            talk_actions.append(("Leave", r_list[1]))
+        elif r_list[0] == "Change":
+            user_dict[r_list[1]] = r_list[2]
             
+    answer = []
+    for action, user_id in talk_actions:
+        if action == "Enter":
+            answer.append(f"{user_dict[user_id]}님이 들어왔습니다.")
+        elif action == "Leave":
+            answer.append(f"{user_dict[user_id]}님이 나갔습니다.")
+    
+    return answer
