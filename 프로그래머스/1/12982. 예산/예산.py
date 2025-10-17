@@ -1,13 +1,12 @@
-import heapq
-
 def solution(d, budget):
+    d.sort()
     result = 0
-    heapq.heapify(d)
-    while d:
-        money = heapq.heappop(d)
-        if budget - money >= 0:
-            budget -= money
+    
+    for i in range(len(d)):
+        if budget - d[i] >= 0:
+            budget -= d[i]
             result += 1
         else:
             break
+    
     return result
