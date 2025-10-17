@@ -1,16 +1,21 @@
 from collections import deque
 
 def solution(cards1, cards2, goal):
-    # deque를 만드는 과정에서 O(N)
-    cards1 = deque(cards1)
-    cards2 = deque(cards2)
+    q1 = deque(cards1)
+    q2 = deque(cards2)
+    q_goal = deque(goal)
     
-    # goal의 각 원소를 순회, O(N)
-    for word in goal:
-        if cards1 and cards1[0] == word:
-            cards1.popleft()
-        elif cards2 and cards2[0] == word:
-            cards2.popleft()
+    while (q1 or q2) and (q_goal):
+        if q1 and q1[0] == q_goal[0]:
+            q1.popleft()
+            q_goal.popleft()
+        elif q2 and q2[0] == q_goal[0]:
+            q2.popleft()
+            q_goal.popleft()
         else:
             return "No"
-    return "Yes"
+    
+    if not q_goal:
+        return "Yes"
+    else:
+        return "False"
