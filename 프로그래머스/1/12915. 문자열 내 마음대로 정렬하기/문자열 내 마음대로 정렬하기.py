@@ -1,3 +1,4 @@
 def solution(strings, n):
-    strings.sort(key=lambda x: (x[n], x))
+    # 시간 복잡도 - O(N log N)
+    strings.sort(key= lambda s: (s[n], s))
     return strings
