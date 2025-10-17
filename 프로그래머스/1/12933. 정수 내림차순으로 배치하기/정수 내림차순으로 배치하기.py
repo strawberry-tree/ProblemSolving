@@ -1,5 +1,5 @@
 def solution(n):
-    n_list = list(str(n))
-    n_list.sort(reverse=True)
-    answer = int("".join(n_list))
+    list_n = list(str(n))
+    list_n.sort(key=lambda x: int(x), reverse=True)
+    answer = int("".join(list_n))
     return answer
