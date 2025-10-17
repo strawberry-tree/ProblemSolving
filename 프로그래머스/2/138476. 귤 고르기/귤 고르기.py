@@ -1,11 +1,16 @@
 from collections import Counter
-
 def solution(k, tangerine):
-    result = 0
-    counts = Counter(tangerine)
-    for _, c in counts.most_common():
-        k -= c
-        result += 1
-        if k <= 0:
+    t_count = Counter(tangerine)
+    total = 0   # 몇 개
+    answer = 0  # 몇 종류
+    
+    values = list(t_count.values())
+    values.sort(reverse=True)
+    # 많은 애들부터...
+    for v in values:
+        total += v
+        answer += 1
+        if total >= k:
             break
-    return result
+            
+    return answer
