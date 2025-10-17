@@ -1,31 +1,16 @@
-def move(x, y, d):
-    if d == "L":
-        return (x - 1, y)
-    elif d == "R":
-        return (x + 1, y)
-    elif d == "U":
-        return (x, y + 1)
-    elif d == "D":
-        return (x, y - 1)
-
 def solution(dirs):
-    x, y = 0, 0
-    answer = 0
-    paths = [] # 좌표 tuple 2개로 구성된 set로 구성된 list...? 
+    dx = {"U": 0, "D": 0, "L": -1, "R": 1}      # x축이동
+    dy = {"U": 1, "D": -1, "L": 0, "R": 0}      # y축이동
+    cx, cy = 0, 0
+    visited = set()
     
-    # 이동
     for d in dirs:
-        nx, ny = move(x, y, d)
+        nx, ny = cx + dx[d], cy + dy[d]
         
-        # 이동 가능할 때
         if -5 <= nx <= 5 and -5 <= ny <= 5:
+            visited.add((cx, cy, nx, ny))
+            visited.add((nx, ny, cx, cy))
+            cx, cy = nx, ny
             
-            # 이미 간 길이 아니면, 이동한 길에 추가
-            road = {(x, y), (nx, ny)}
-            if road not in paths:
-                paths.append(road)
-            
-            # 이동
-            x, y = nx, ny
-
-    return len(paths)
+    
+    return len(visited) // 2
