@@ -1,10 +1,18 @@
 def solution(s):
-    s = s[2:-2]
-    s_list = [list(map(int, elem.split(","))) for elem in s.split("},{")]
-    s_list.sort(key=len)
+    s1 = s[2:-2]    # 맨 처음 {{, }} 없애기
+    s1_list = s1.split("},{") # 각 튜플로 나누기 ("a,b,c")꼴
+    tuple_list = []
     
-    result = [s_list[0][0]]
-    for i in range(1, len(s_list)):
-        new_elem = set(s_list[i]) - set(s_list[i-1])
-        result.append(list(new_elem)[0])
-    return result
+    # 2차원 배열로 만들기
+    for s1_part in s1_list:
+        tuple_list.append(set(map(int, s1_part.split(","))))
+    
+    # 길이순으로 정렬
+    tuple_list.sort(key= lambda x: len(x))
+    
+    answer = [list(tuple_list[0])[0]]
+    
+    for i in range(1, len(tuple_list)):
+        added = list(tuple_list[i] - tuple_list[i - 1])[0]
+        answer.append(added)
+    return answer
