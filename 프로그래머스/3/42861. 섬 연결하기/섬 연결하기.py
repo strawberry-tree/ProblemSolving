@@ -1,36 +1,27 @@
 def find(x, parent):
-    if parent[x] != x: 
-        parent[x] = find(parent[x], parent) # 경로압축
+    if parent[x] != x:
+        parent[x] = find(parent[x], parent)
     return parent[x]
 
-def union(x, y, parent, rank):
+def union(x, y, parent):
     root_x = find(x, parent)
     root_y = find(y, parent)
-
-    if root_x != root_y:
-        if rank[root_x] > rank[root_y]:
-            parent[root_y] = root_x
-        elif rank[root_x] < rank[root_y]:
-            parent[root_x] = root_y
-        else:
-            parent[root_x] = root_y
-            rank[root_y] += 1
-        return True
+    
+    if root_x == root_y:
+        return False
     else:
-        # 이미 부모 노드가 동일, 안 지어도 됨
-        return False        
+        parent[root_x] = root_y
+        return True
 
 def solution(n, costs):
-    parent = list(range(n))    # 부모노드
-    rank = [0] * n      # 랭크
-    total = 0           # 전체 비용
+    # 비용 오름차순으로 정렬
+    costs.sort(key=lambda x:x[2])
+    answer = 0
+    parent = [i for i in range(n)]
     
-    # 저렴한 순서대로 sort
-    costs.sort(key = lambda x: x[2])
+    # 섬1, 섬2, 비용
+    for i1, i2, cost in costs:
+        if union(i1, i2, parent):
+            answer += cost
     
-    # 부모 노드가 다른 경우 연결, 같은 경우 생략
-    for cx, cy, cost in costs:
-        if union(cx, cy, parent, rank):
-            total += cost
-    
-    return total
+    return answer
