@@ -1,25 +1,28 @@
-def givemoney(money, me, total, pyramid):
-    # 선형트리인 경우 최대 N단계 올라감
-    donate = int(money * 0.1)
-    rest = money - donate
-    total[me] += rest
-    if donate > 0 and pyramid[me] != "-":
-        givemoney(donate, pyramid[me], total, pyramid)
+from collections import defaultdict
+
+def solution(enroll, referral, seller, amount):    
+    result = defaultdict(int)  # 각 구성원의 수입
+    # {돈 내는사람 : 돈 받는 사람}
+    referrer = dict({enroll[i]: referral[i] for i in range(len(enroll))})
     
-def solution(enroll, referral, seller, amount):
-    # key 자식 판매원, value 부모 판매원
-    pyramid = {enroll[i]: referral[i] for i in range(len(enroll))}
-    pyramid["-"] = None
+    # 10%를 추천인에게 보내고 나머지는 내가 가짐
+    def add_money(name, profit):
+        bribe = int(profit * 0.1)
+        result[name] += profit - bribe
+        bribe_name = referrer[name]
+        
+        if bribe < 1 or bribe_name == "-":
+            return
+        add_money(bribe_name, bribe)
     
-    # key 판매원, value 정산 금액
-    total = {e: 0 for e in enroll}
-    
-    # 정산
     for i in range(len(seller)):
-        givemoney(amount[i] * 100, seller[i], total, pyramid)
+        name = seller[i]       # 판매자
+        profit = amount[i] * 100    # 발생 이익
+        add_money(name, profit)
+        
+    answer = []
     
-    # result 배열 만들기
-    result = []
-    for e in enroll:
-        result.append(total[e])
-    return result
+    for name in enroll:
+        answer.append(result[name])
+        
+    return answer
