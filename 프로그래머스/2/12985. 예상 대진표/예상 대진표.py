@@ -1,9 +1,11 @@
 def solution(n,a,b):
-    div = 2
-    i = 1
+    
+    i = 1   # 1라운드부터 시작
     
     while True:
-        if (a - 1) // div == (b - 1) // div:
+        a_team = (a - 1) // (2 ** i)
+        b_team = (b - 1) // (2 ** i)
+    
+        if a_team == b_team:
             return i
-        div *= 2
         i += 1
