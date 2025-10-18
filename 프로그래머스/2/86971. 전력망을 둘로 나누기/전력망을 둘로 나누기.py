@@ -1,32 +1,36 @@
-from collections import defaultdict, deque
+# 일단 끊고 한쪽에서 DFS/BFS?
+from collections import deque, defaultdict
 
-def solution(n, wires):
+def bfs(n, wires):
     graph = defaultdict(list)
-    min_diff = float('inf')
-    
-    # 인접 리스트
-    for (v1, v2) in wires:
+    for v1, v2 in wires:
         graph[v1].append(v2)
         graph[v2].append(v1)
+    visited = [False] * (n + 1)
     
-    # bfs - 잘린 선 제외
-    def bfs(node, v1, v2):
-        visited = set([node])
-        queue = deque([node])
-        while queue:
-            curr = queue.popleft()
-            for adj in graph[curr]:
-                if {curr, adj} != {v1, v2}:
-                    if adj not in visited:
-                        visited.add(adj)
-                        queue.append(adj)
-        return len(visited)
+    queue = deque([1])
+    visited[1] = True
+    count = 1
+    
+    while queue:
+        node = queue.popleft()
+        for adj in graph[node]:
+            if not visited[adj]:
+                queue.append(adj)
+                visited[adj] = True
+                count += 1
+    
+    return count
+    
+
+def solution(n, wires):
+    min_diff = float('inf')
+    for i in range(len(wires)):
+        cut_wires = wires[:i] + wires[i + 1:]
+        num_tops = bfs(n, cut_wires)
         
-    # 각 와이어를 자를 때 bfs 수행하고 탑 수 차이 비교
-    for (v1, v2) in wires:
-        oneside = bfs(1, v1, v2)
-        otherside = n - oneside
-        diff = abs(oneside - otherside)
+        # num_tops와 n - num_tops의 차이
+        diff = abs(num_tops * 2 - n)
         min_diff = min(min_diff, diff)
     
     return min_diff
