@@ -1,26 +1,36 @@
-def check(n, x, y, queens):
-    for qx, qy in queens:
-        if qx == x or qy == y:
-            return False
-        if abs(x - qx) == abs(y - qy):
-            return False
-    return True
 
-def place(n, x, queens, answer):
-    # x행에 퀸을 배치한다.
-    # 모든 행에 퀸 배치가 완료된 경우
-    if x >= n:
-        return answer + 1
-    
-    # y열에 퀸을 배치할 수 있는지 확인
-    for y in range(n):
-        if check(n, x, y, queens):
-            queens.add((x, y))
-            answer = max(answer, place(n, x + 1, queens, answer))
-            queens.remove((x, y))
-    return answer
 
 def solution(n):
-    queens = set()
-    answer = place(n, 0, queens, 0)
-    return answer
+    # x행 y열에 배치 가능?
+    def check(x, y, placements):
+        # 동일 열에 배치된 경우
+        if y in placements:
+            return False
+        
+        # 동일 대각선에 배치된 경우
+        for i, j in enumerate(placements):
+            if i + j == x + y or i - j == x - y:
+                return False
+        
+        return True
+            
+    # x행에 채우기
+    def fill_in(x):
+        # 모두 채운 경우, 1가지 경우의 수
+        if x >= n:
+            return 1
+        
+        results = 0
+        
+        # 0 -> n - 1 열까지 시도
+        for y in range(n):
+            if check(x, y, placements):
+                placements.append(y)
+                results += fill_in(x + 1)
+                placements.pop()
+            
+        return results
+            
+    # 0행부터 차례로 채우기
+    placements = []
+    return fill_in(0)
