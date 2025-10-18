@@ -1,23 +1,23 @@
 from collections import deque
 
 def solution(n, computers):
-    visited = set()
-    count = 0
+    visited = [False] * (n)
     
-    def bfs(n):
-        queue = deque([n])
-        visited.add(n)
+    def bfs(start):
+        queue = deque([start])
+        visited[start] = True
         
         while queue:
-            curr_i = queue.popleft()
-            for next_i, connected in enumerate(computers[curr_i]):
-                if next_i != curr_i and connected == 1 and next_i not in visited:
-                    queue.append(next_i)
-                    visited.add(next_i)
-    
-    for node in range(n):
-        if node not in visited:
-            bfs(node)
-            count += 1
-
-    return count
+            curr = queue.popleft()
+            for adj in range(n):
+                if computers[curr][adj] == 1:
+                    if curr != adj and not visited[adj]:
+                        visited[adj] = True
+                        queue.append(adj)
+                        
+    answer = 0
+    for i in range(n):
+        if not visited[i]:
+            bfs(i)
+            answer += 1
+    return answer
