@@ -7,7 +7,7 @@ def solution(orders, course):
         cmb_list = []
         for order in orders:
             for cmb in combinations(order, num_menu):
-                cmb_list.append(tuple(sorted(list(set(cmb)))))
+                cmb_list.append(tuple(sorted(cmb)))
                 
         if not cmb_list:
             continue
